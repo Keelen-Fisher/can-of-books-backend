@@ -1,28 +1,15 @@
 'use strict';
-
-require('dotenv').config();
 const mongoose = require('mongoose');
+// require('dotenv').config();
+const { Schema } = mongoose;
+
 mongoose.connect(process.env.DB_URL);
-const BookModel = require('./models/book.js');
+const bookSchema = new Schema ({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  status: { type: String, required: true }
+});
 
-async function seed(){
-  await BookModel.create({
-    title: 'The Hobbit',
-    description: 'A hobbit goes on an unexpected journey',
-    status: 'Available'
-  });
-  await BookModel.create({
-    title: 'Green Eggs and Ham',
-    description: 'An argument about the quality of breakfast',
-    status: 'Available'
-  });
-  await BookModel.create({
-    title: 'The Prince',
-    description: 'A political treatise from 16th century Italy',
-    status: 'Available'
-  });
-  console.log('Seeded, closing connection');
-  mongoose.disconnect();
-}
+const bookModel = mongoose.model('Books', bookSchema);
 
-seed();
+module.exports = bookModel;
